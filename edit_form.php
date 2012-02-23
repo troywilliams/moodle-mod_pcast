@@ -69,11 +69,13 @@ class mod_pcast_entry_form extends moodleform {
         $mform->addElement('text', 'subtitle', get_string('subtitle', 'pcast'), array('size'=>'64'));
         $mform->setType('subtitle', PARAM_NOTAGS);
         $mform->addHelpButton('subtitle', 'subtitle', 'pcast');
+        $mform->addRule('subtitle', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
         // Keywords
         $mform->addElement('text', 'keywords', get_string('keywords', 'pcast'), array('size'=>'64'));
         $mform->setType('keywords', PARAM_NOTAGS);
         $mform->addHelpButton('keywords', 'keywords', 'pcast');
+        $mform->addRule('keywords', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
         //Disable if turned off on module settings page
         if ($pcast->userscancategorize) {
