@@ -41,10 +41,9 @@ defined('MOODLE_INTERNAL') || die();
  * @return bool
  */
 function xmldb_pcast_upgrade($oldversion=0) {
+    global $CFG, $DB, $OUTPUT;
 
-    global $CFG, $THEME, $db;
-
-    $result = true;
+    $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 
 /// And upgrade begins here. For each one, you'll need one
 /// block of code similar to the next one. Please, delete
@@ -81,8 +80,21 @@ function xmldb_pcast_upgrade($oldversion=0) {
 
         upgrade_mod_savepoint(true, 2011080700, 'pcast');
 
-    }        
-
+    }
+    /// Field type and precision upgrades
+    if ($oldversion < 2011080702) {
+        // Define pcast table and intro field
+        $pcast = new xmldb_table('pcast');
+        $intro = new xmldb_field('intro');
+        $intro->set_attributes(XMLDB_TYPE_TEXT, 'small', XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $dbman->change_field_type($pcast, $intro);
+        // Define pcastepisodes table and summary field
+        $pcastepisodes = new xmldb_table('pcast_episodes');
+        $summary = new xmldb_field('summary');
+        $summary->set_attributes(XMLDB_TYPE_TEXT, 'small', XMLDB_UNSIGNED, XMLDB_NOTNULL);
+        $dbman->change_field_type($pcastepisodes, $summary);
+        upgrade_mod_savepoint(true, 2011080702, 'pcast');
+    }
 /// Final return of upgrade result (true/false) to Moodle. Must be
 /// always the last line in the script
     return true;
