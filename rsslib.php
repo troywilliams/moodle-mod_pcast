@@ -71,7 +71,7 @@ function pcast_rss_get_feed($context, $args) {
     if ($groupmode == SEPARATEGROUPS) {
         //User must have the capability to see all groups or be a member of that group
         $members = get_enrolled_users($context, 'mod/pcast:write', $groupid, 'u.id', 'u.id ASC');
-        
+
         // Is a member of the current group
         if(!isset($members[$userid]->id) or ($members[$userid]->id != $userid)){
 
@@ -87,7 +87,7 @@ function pcast_rss_get_feed($context, $args) {
                 $uservalidated = false;
             }
         }
-        
+
     }
 
     if (!$uservalidated) {
@@ -158,7 +158,9 @@ function pcast_rss_get_feed($context, $args) {
                 //TODO: This is very inefficient (this generates 2 DB queries per entry)
                 $category = pcast_rss_category_lookup($rec);
                 $item->topcategory = $category->top->name;
-                $item->nestedcategory = $category->nested->name;
+                if (!empty($category->nested)) {
+                    $item->nestedcategory = $category->nested->name;
+                }
             }
             $items[] = $item;
 
@@ -185,7 +187,7 @@ function pcast_rss_get_feed($context, $args) {
         //Now, if everything is ok, concatenate it
         if (!empty($header) && !empty($episodes) && !empty($footer)) {
             $rss = $header.$episodes.$footer;
-            
+
             //Save the XML contents to file.
             $status = rss_save_file('mod_pcast', $filename, $rss);
         }
@@ -218,7 +220,7 @@ function pcast_rss_get_sql($pcast, $time=0) {
     } else { // Oldest first
         $sort = "ORDER BY e.timecreated asc";
     }
-    
+
     if ($pcast->displayauthor == 1) {//With author
         $sql = "SELECT e.id AS episodeid,
                   e.pcastid AS pcastid,
@@ -407,7 +409,7 @@ function pcast_rss_header($title = NULL, $link = NULL, $description = NULL, $pca
             if(isset($author)) {
                 $result .= rss_full_tag('itunes:author', 2, false, fullname($author));
             }
-            
+
             $result .= rss_full_tag('itunes:subtitle', 2, false, s($pcast->subtitle));
             //Implement summary from pcast intro
             $result .= rss_full_tag('itunes:summary', 2, false, s($pcast->intro));
