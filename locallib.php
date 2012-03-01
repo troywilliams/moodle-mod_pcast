@@ -85,7 +85,7 @@ function pcast_print_approval_menu($cm, $pcast, $mode, $hook, $sortkey = '', $so
 
     echo html_writer::tag('div', get_string("explainalphabet", "pcast"), array('class' => 'pcastexplain'));
     echo html_writer::empty_tag('br');
-    
+
     pcast_print_special_links($cm, $pcast, $mode, $hook);
 
     pcast_print_alphabet_links($cm, $pcast, $mode, $hook,$sortkey, $sortorder);
@@ -107,7 +107,7 @@ function pcast_print_alphabet_menu($cm, $pcast, $mode, $hook, $sortkey='', $sort
 
     echo html_writer::tag('div', get_string("explainalphabet", "pcast"), array('class' => 'pcastexplain'));
     echo html_writer::empty_tag('br');
-    
+
     pcast_print_special_links($cm, $pcast, $mode, $hook);
     pcast_print_alphabet_links($cm, $pcast, $mode, $hook, $sortkey, $sortorder);
     pcast_print_all_links($cm, $pcast, $mode, $hook);
@@ -210,7 +210,7 @@ function pcast_print_categories_menu($cm, $pcast, $hook=PCAST_SHOW_ALL_CATEGORIE
         // Lookup the category name by 4 digit ID
         $category->category = $hook;
         $category = pcast_get_itunes_categories($category, $pcast);
-        
+
         // Print the category names in the format top: nested
         if($category->nestedcategory == 0) {
             echo $menu[(int)$hook];
@@ -219,7 +219,7 @@ function pcast_print_categories_menu($cm, $pcast, $hook=PCAST_SHOW_ALL_CATEGORIE
             echo $menu[(int)$category->topcategory*1000].': '.$menu[(int)$hook];
         }
     }
-     
+
      echo '</span></td>';
      echo '<td class="pcast-menu20">';
 
@@ -251,7 +251,7 @@ function pcast_print_all_links($cm, $pcast, $mode, $hook) {
       $url = new moodle_url('/mod/pcast/view.php', array('id'=>$cm->id, 'mode'=>$mode, 'hook'=>'ALL'));
       echo html_writer::tag('a', $strallentries, array('title'=>$strexplainall,'href'=>$url));
     }
-     
+
 }
 
 /**
@@ -263,7 +263,7 @@ function pcast_print_all_links($cm, $pcast, $mode, $hook) {
  * @param string $hook
  */
 function pcast_print_special_links($cm, $pcast, $mode, $hook) {
-    
+
     global $CFG;
 
     $strspecial = get_string("special", "pcast");
@@ -276,7 +276,7 @@ function pcast_print_special_links($cm, $pcast, $mode, $hook) {
       echo html_writer::tag('a', $strspecial, array('title'=>$strexplainspecial,'href'=>$url));
       echo "  | ";
     }
-     
+
 }
 
 /**
@@ -309,7 +309,7 @@ global $CFG;
             echo html_writer::empty_tag('br');
         }
     }
-     
+
 }
 
 /**
@@ -323,7 +323,7 @@ global $CFG;
  */
 function pcast_print_sorting_links($cm, $mode, $sortkey = '',$sortorder = '', $hook='') {
     global $CFG, $OUTPUT;
-    
+
     //Get our strings
     $asc    = get_string("ascending", "pcast");
     $desc   = get_string("descending", "pcast");
@@ -361,7 +361,7 @@ function pcast_print_sorting_links($cm, $mode, $sortkey = '',$sortorder = '', $h
                 case PCAST_DATE_UPDATED:
                 case PCAST_DATE_CREATED:
                 case PCAST_AUTHOR_FNAME:
-                case PCAST_AUTHOR_LNAME:                    
+                case PCAST_AUTHOR_LNAME:
                     $strchangeto = get_string('changeto', 'pcast', $asc);
                     $neworder = 'asc';
                     $icon = html_writer::empty_tag('img', array('src'=>$OUTPUT->pix_url('asc', 'pcast'),
@@ -379,8 +379,8 @@ function pcast_print_sorting_links($cm, $mode, $sortkey = '',$sortorder = '', $h
                     break;
             }
 
-        }        
-        
+        }
+
     switch ($sortkey) {
         case PCAST_DATE_UPDATED:
 
@@ -425,7 +425,7 @@ function pcast_print_sorting_links($cm, $mode, $sortkey = '',$sortorder = '', $h
             $html .= $strsortby.$strsep;
             $html .= $link1 . ' | ';
             $html .= html_writer::tag('span', $link2, array('class'=>'pcast-bold'));
-            
+
             break;
 
         case PCAST_AUTHOR_FNAME:
@@ -448,7 +448,7 @@ function pcast_print_sorting_links($cm, $mode, $sortkey = '',$sortorder = '', $h
             $html .= $strsortby.$strsep;
             $html .= $link1 . ' | ';
             $html .= html_writer::tag('span', $link2, array('class'=>'pcast-bold'));
-            
+
 
             break;
 
@@ -472,9 +472,9 @@ function pcast_print_sorting_links($cm, $mode, $sortkey = '',$sortorder = '', $h
             $html .= $strsortby.$strsep;
             $html .= $link1 . ' | ';
             $html .= html_writer::tag('span', $link2, array('class'=>'pcast-bold'));
-            
+
             break;
-            
+
         default:
 
             $html ='';
@@ -521,7 +521,7 @@ function pcast_display_standard_episodes($pcast, $cm, $groupmode = 0, $hook='', 
     }
     $sql = pcast_get_episode_sql();
     $sql .=    " WHERE p.pcastid = ? AND (p.approved =? OR p.userid =? )";
-        
+
     if (empty($hook) or ($hook == 'ALL')) {
 
         $sql .= " ORDER BY ". $sort;
@@ -545,7 +545,7 @@ function pcast_display_standard_episodes($pcast, $cm, $groupmode = 0, $hook='', 
         $sql .= " and ". $DB->sql_like('p.name', '?',false)." ORDER BY $sort";
         $episodes = $DB->get_records_sql($sql,array($pcast->id, '1', $USER->id, $hook.'%'));
     }
-    
+
     //Get Group members
     $members = get_enrolled_users($context, 'mod/pcast:write', $currentgroup, 'u.id', 'u.id ASC');
     foreach ($episodes as $episode) {
@@ -628,7 +628,7 @@ function pcast_display_category_episodes($pcast, $cm, $groupmode = 0, $hook=PCAS
     // Get the episodes for this pcast
     $sql = pcast_get_episode_sql();
     $sql .=    " WHERE p.pcastid = ? AND (p.approved =? OR p.userid =? )";
-    
+
     if ($hook == PCAST_SHOW_ALL_CATEGORIES) {
         $sql .= " ORDER BY cat.name, ncat.name, p.name ASC";
         $episodes = $DB->get_records_sql($sql,array($pcast->id, '1', $USER->id));
@@ -791,7 +791,7 @@ function pcast_display_author_episodes($pcast, $cm, $groupmode = 0, $hook='', $s
                 $sql .= " and ". $DB->sql_like('u.lastname', '?',false) . $order;
                 $episodes = $DB->get_records_sql($sql,array($pcast->id, '1', $USER->id, $hook.'%'));
             }
-        
+
             break;
 
         case PCAST_AUTHOR_FNAME:
@@ -997,14 +997,14 @@ function pcast_display_episode_brief($episode, $cm, $hook ='ALL'){
 
     // Attachment
     $table->data[] = array (get_string("pcastmediafile","pcast"), pcast_display_mediafile_link($episode, $cm, true));
-    
+
     // Author
     // Only print author if allowed or has manage rights.
     if (((isset($episode->displayauthor))and ($episode->displayauthor != '0')) or (has_capability('mod/pcast:manage', $context))) {
         $user = $DB->get_record("user", array("id" => $episode->userid));
-        $table->data[] = array (get_string("author","pcast"), fullname($user));
+        $table->data[] = array (get_string("author","pcast"), fullname($user, true));
     }
-    
+
     // Created
     $table->data[] = array (get_string("created","pcast"), userdate($episode->timecreated));
 
@@ -1045,7 +1045,7 @@ function pcast_display_episode_brief($episode, $cm, $hook ='ALL'){
     $table->data[] = array ('',$link);
 
 
-    
+
     echo $html;
     echo html_writer::table($table);
     echo html_writer::end_tag('div') . "\n";
@@ -1130,7 +1130,7 @@ function pcast_display_episode_full($episode, $cm, $course){
     // Only print author if allowed or has manage rights.
     if (((isset($episode->displayauthor))and ($episode->displayauthor != '0')) or (has_capability('mod/pcast:manage', $context))) {
         $user = $DB->get_record("user", array("id" => $episode->userid));
-        $table->data[] = array (get_string("author","pcast"), fullname($user));
+        $table->data[] = array (get_string("author","pcast"), fullname($user, true));
     }
 
     // Created
@@ -1218,7 +1218,7 @@ function pcast_display_episode_views($episode){
 
         foreach ($views as $view) {
             $user = $DB->get_record("user", array("id" => $view->userid));
-            $linedata = array (fullname($user), userdate($view->lastview), $view->views);
+            $linedata = array (fullname($user, true), userdate($view->lastview), $view->views);
             $table->data[] = $linedata;
         }
         echo html_writer::empty_tag('br');
@@ -1259,7 +1259,7 @@ function pcast_display_episode_comments($episode, $cm, $course) {
 
         }
     }
-    
+
     echo $html;
 
 }
@@ -1286,7 +1286,7 @@ function pcast_display_episode_ratings($episode, $cm, $course) {
     // load ratings
     require_once($CFG->dirroot.'/rating/lib.php');
     if ($episode->assessed!=RATING_AGGREGATE_NONE) {
-        
+
         $ratingoptions = new stdClass();
         // $ratingoptions->plugintype = 'mod';
         // $ratingoptions->pluginname = 'pcast';
@@ -1420,7 +1420,7 @@ function pcast_display_mediafile_link($episode, $cm, $audioonly=false) {
             $path = file_encode_url($CFG->wwwroot.'/pluginfile.php', '/'.$context->id.'/mod_pcast/episode/'.$episode->id.'/'.$filename);
         }
     }
-    
+
     $templink = get_string('nopcastmediafile','pcast');
     // Make sure there is actually an attachment before trying to render the file link and player
     if(!empty($filename)) {
@@ -1434,7 +1434,7 @@ function pcast_display_mediafile_link($episode, $cm, $audioonly=false) {
         if(($CFG->pcast_usemediafilter)) {
 
             $templink = $out;
-            
+
         } else {
             //Add nolink tags to prevent autolinking.
             $templink = html_writer::start_tag('div',array('class'=>'nolink'));
