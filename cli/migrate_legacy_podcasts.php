@@ -129,11 +129,7 @@ function pcast_migrate_legacy_podcasts() {
                 $legacypodcast = array_shift($legacypodcasts);
                 try {
                     echo 'Working on podcast - '.$legacypodcast->name."\n";
-                    // Check course exists
-                    if (!$DB->record_exists('course', array('id'=>$legacypodcast->course))) {
-                        echo " course doesn't exist, skipping! \n";
-                        continue;
-                    }
+                    
                     $pcast = new stdClass();
                     $pcast->course = $legacypodcast->course;
                     $pcast->userid = ($legacypodcast->userid) ? $legacypodcast->userid : $admin->id;
