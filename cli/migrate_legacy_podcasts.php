@@ -188,6 +188,8 @@ function pcast_migrate_legacy_podcasts() {
                             echo " moved mediafile - {$item->filename} to filepool\n";
                         }
                     }
+                    echo 'clearing fastmod course cache for id# '.$pcast->course."\n";
+                    rebuild_course_cache($pcast->course, true);
                 } catch (moodle_exception $e) {
                     debugging('Error: '.$e->getMessage(), DEBUG_ALL);
                 }
